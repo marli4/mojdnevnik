@@ -1,0 +1,42 @@
+# Python / Кэш
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Виртуальное окружение
+venv/
+.venv/
+env/
+ENV/
+
+# Секретные данные и настройки
+.env
+local_settings.py
+
+# Базы данных
+*.sqlite3
+*.db
+*.sqlite3-journal
+
+# Логи
+*.log
+
+# Медиафайлы и статика (если генерируются локально)
+media/
+staticfiles/
+static_collected/
+
+# IDE и редакторы
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# ОС
+.DS_Store
+Thumbs.db
