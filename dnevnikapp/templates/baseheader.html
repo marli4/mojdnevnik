@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block header %}
+    <header>
+        <nav>
+            <ul>
+                {% for link in headerlinks %}
+                    <li><a href="{% url link.url %}" class="button">{{ link.title }}</a></li>
+                {% endfor %}
+            </ul>
+        </nav>
+    </header>
+{% endblock %}
+

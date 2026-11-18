@@ -1,0 +1,54 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Личный кабинет{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <h1>Личный кабинет</h1>
+        <div class="mainblock">
+            <div class="profileline">
+                <div class="profilecard">
+                    <h2>{{ user.last_name }} {{ user.first_name }} 
+                        {% if user.patronimic %}
+                            {{ user.patronimic }}
+                        {% endif %}
+                    </h2>
+                    {% if user.role == "student" %}
+                        <h2>Группа: {{ user.group.name }}</h2>
+                    {% endif %}
+                    <a class="button">Сменить пароль</a>
+                    <a class="button">Выход</a>
+                </div>
+                <div class="buttonscolumn">
+                    {% if user.role == "student" %}
+                        <a class="button">Дневник</a>
+                        <a class="button">Журнал</a>
+                    {% elif user.role == "parent" %}
+                        <a class="button">Дети</a>
+                    {% elif user.role == "teacher" %}
+                        <a class="button">Занятия</a>
+                        <a class="button">Группы</a>
+                    {% elif user.role == "admin" %}
+                        <a class="button">Группы</a>
+                    {% endif %}
+                </div>
+            </div>
+            <div>
+                <h2 class="whitetext">Уведомления</h2>
+                <div class="notifications">
+                    {% for notification in notifications %}
+                        <div class="notification">
+                            <h2>{{ notification.created_at }}</h2>
+                            <p>{{ notification.text }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

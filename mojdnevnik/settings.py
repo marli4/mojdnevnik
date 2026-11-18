@@ -62,6 +62,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'dnevnikapp.context_processors.header_context',
             ],
         },
     },
@@ -128,3 +129,5 @@ MAILERS = {
 }
 
 AUTH_USER_MODEL = 'dnevnikapp.CustomUser'
+
+LOGIN_REDIRECT_URL="profile"

@@ -16,7 +16,10 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from dnevnikapp import views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    path('profile/',views.profileview, name="profile"),
+    path('login/',views.MyLoginView.as_view(), name="login"),
+    path('admin/', admin.site.urls, name="admin"),
 ]

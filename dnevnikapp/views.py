@@ -1,3 +1,33 @@
 from django.shortcuts import render
+from django.views.generic import TemplateView, DetailView
+from django.contrib.auth.views import LoginView
+from django.contrib.auth.mixins import LoginRequiredMixin
+from .forms import *
+from django.contrib.auth import get_user_model
+from django.core.exceptions import PermissionDenied
+from django.contrib.auth.decorators import login_required
+from .decorators import roles_required 
+from .models import *
 
-# Create your views here.
+User = get_user_model()
+
+class MyLoginView(LoginView):
+    template_name="login.html"
+    authentication_form=MyLoginForm
+
+@login_required
+def profileview(request):
+    if (request.user.role == User.Role.STUDENT):
+        user = User.objects.select_related('group').get(
+            pk=request.user.pk
+        )
+    else:
+        user = request.user
+    notifications = Notification.objects.filter(user=user)
+
+    context = {
+        "user":user,
+        "notifications": notifications,
+    }
+    return render(request, "profile.html", context)
+
