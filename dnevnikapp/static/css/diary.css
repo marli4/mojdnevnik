@@ -25,18 +25,27 @@
     display:flex;
     align-items: center;
     width:334px;
+    transition:0.2s;
+    overflow: hidden;
 }
-.lessonnumber, .lessonabsence, .lessongrade{
+.lesson:hover{
+    background-color: var(--accentcolor);
+}
+.lessonnumber, .lessonabsence, .lessongrade, .lessongroup{
     padding:8px;
-    width:35px;
+    width:35px !important;
     box-sizing: border-box;
     text-align: center;
 }
 .lessonsubject{
     padding:8px;
     box-sizing: border-box;
-    width:100%;
+    flex-grow: 1;
 }
 .lessonnumber{
     background-color: var(--accentcolor);
+}
+.lessongroup{
+    width: auto !important;
+    word-break: keep-all;
 }

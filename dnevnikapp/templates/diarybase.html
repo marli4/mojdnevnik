@@ -1,0 +1,63 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/diary.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Дневник{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <h1>{% block heading %}Дневник{% endblock %}</h1>
+        <div class="valueslider">
+            <a href="{% url request.resolver_match.view_name date=prevWeekStart %}" class="button"><</a>
+            <p>Неделя {{ weeknum }}</p>
+            <a href="{% url request.resolver_match.view_name date=nextWeekStart %}" class="button">></a>
+        </div>
+        <div>
+            <div class="daysgrid">
+                {% for daynum, day in days.items %}
+                    <div class="day">
+                        <div class="dateline">
+                            <h3>
+                                {% if daynum == '0' %}
+                                    ПН
+                                {% elif daynum == '1' %}
+                                    ВТ
+                                {% elif daynum == '2' %}
+                                    СР
+                                {% elif daynum == '3' %}
+                                    ЧТ
+                                {% elif daynum == '4' %}
+                                    ПТ
+                                {% elif daynum == '5' %}
+                                    СБ
+                                {% elif daynum == '6' %}
+                                    ВС
+                                {% endif %}
+                            </h3>
+                            <h3>{{ day.date|date:"d F Y" }}</h2>
+                        </div>
+                        <div class="lessons">
+                            {% for lesson in day.lessons %}
+                                <div class="lesson">
+                                    {% if lesson %}
+                                        <p class="lessonnumber">{{ lesson.lesson_number }}</p>
+                                        <p class="lessonsubject">{{ lesson.subject.name }} {{ lesson.room }} каб.</p>
+                                        {% block lessonadditional %}{% endblock %}
+                                    {% else %}
+                                        <p class="lessonnumber">{{ forloop.counter }}</p>
+                                        <p class="lessonsubject"></p>
+                                        <p class="lessonabsence"></p>
+                                        <p class="lessongrade"></p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

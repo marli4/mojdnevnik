@@ -1,17 +1,14 @@
 from django.shortcuts import render
-from django.views.generic import TemplateView, DetailView
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.mixins import LoginRequiredMixin
 from .forms import *
 from django.contrib.auth import get_user_model
-from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from .decorators import roles_required 
 from .models import *
 from .utils import getWeekStart
 from datetime import timedelta
-from datetime import datetime
 from django.db.models import Prefetch
+from django.core.exceptions import PermissionDenied
 
 
 User = get_user_model()
@@ -65,10 +62,64 @@ def diaryView(request, date):
         
         daynum = (lesson.date - weekStart).days
         days[str(daynum)]["lessons"][lesson.lesson_number-1] = lesson
-    print(days)
 
     context = {
         "days":days,
+        "prevWeekStart":prevWeekStart,
+        "nextWeekStart":nextWeekStart,
+        "weeknum":date.isocalendar().week,
     }
-
     return render(request, "diary.html", context)
+
+@login_required
+@roles_required("teacher","admin")
+def groupListView(request):
+    groupslist = Group.objects.all().order_by("name")
+    context = {
+        "groups":groupslist,
+    }
+    return render(request, "grouplist.html", context=context)
+
+@login_required
+@roles_required("teacher")
+def lessonsView(request, date):
+    weekStart = getWeekStart(date)
+    nextWeekStart = weekStart + timedelta(weeks=1)
+    prevWeekStart = weekStart - timedelta(weeks=1)
+
+    weekLessons = Lesson.objects.select_related("subject", "group"
+                                                ).filter(date__gte=weekStart, date__lt=(weekStart + timedelta(days=7)), teacher=request.user
+                                                ).order_by("date","lesson_number")
+    
+    days = {str(i): {"lessons": [None] * 8, "date": weekStart + timedelta(i)} for i in range(7)}
+    for lesson in weekLessons:
+        daynum = (lesson.date - weekStart).days
+        days[str(daynum)]["lessons"][lesson.lesson_number-1] = lesson
+
+    context = {
+        "days":days,
+        "prevWeekStart":prevWeekStart,
+        "nextWeekStart":nextWeekStart,
+        "weeknum":date.isocalendar().week,
+    }
+    return render(request, "lessons.html", context=context)
+
+@login_required
+def groupSubjectsView(request, groupid):
+    if request.user.role == User.Role.STUDENT:
+        if groupid != request.user.group.id:
+            raise PermissionDenied
+
+    subjects = Subject.objects.all()
+    context={
+        "subjects":subjects,
+        "group":Group.objects.filter(pk=groupid).first(),
+    }
+    return render(request, "subjectslist.html", context=context)
+
+@login_required
+def gradeBookView(request, groupid, subjectid):
+    if request.user.role == User.Role.STUDENT:
+        if groupid != request.user.group.id:
+            raise PermissionDenied
+    return render(request, "gradebook.html")

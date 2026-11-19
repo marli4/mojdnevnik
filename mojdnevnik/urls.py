@@ -25,6 +25,10 @@ register_converter(converters.DateConverter, "ddmmyyyy")
 urlpatterns = [
     path("profile/",views.profileview, name="profile"),
     path("diary/<ddmmyyyy:date>/", views.diaryView, name="diary"),
+    path("groups/", views.groupListView, name="groups"),
+    path("groups/<int:groupid>/gradebook/",views.groupSubjectsView,name="gradebook"),
+    path("groups/<int:groupid>/gradebook/<int:subjectid>/",views.gradeBookView,name="gradebook"),
+    path("lessons/<ddmmyyyy:date>/",views.lessonsView, name="lessons"),
     path("login/",views.MyLoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("admin/", admin.site.urls, name="admin"),

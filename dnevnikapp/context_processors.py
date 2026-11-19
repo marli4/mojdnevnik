@@ -13,7 +13,7 @@ def header_context(request):
     elif user.role == "admin":
         links = [
             {"title":"Главная", "url":reverse("profile")},
-            {"title":"Группы", "url":reverse("profile")},
+            {"title":"Группы", "url":reverse("groups")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
 
@@ -33,10 +33,12 @@ def header_context(request):
             {"title":"Профиль", "url":reverse("profile")},
         ]
     elif user.role == "teacher":
+        today = timezone.localdate()
+        diary_url = reverse("diary", kwargs={"date": today})
         links = [
             {"title":"Главная", "url":reverse("profile")},
-            {"title":"Занятия", "url":reverse("profile")},
-            {"title":"Группы", "url":reverse("profile")},
+            {"title":"Занятия", "url":reverse("lessons", kwargs={"date": today})},
+            {"title":"Группы", "url":reverse("groups")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
     return {"headerlinks":links}

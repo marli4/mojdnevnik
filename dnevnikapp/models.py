@@ -123,6 +123,10 @@ class Lesson(models.Model):
             models.UniqueConstraint(
                 fields=["date","lesson_number","group"],
                 name="unique_lesson_per_date_number_group"
+            ),
+            models.UniqueConstraint(
+                fields=["date","lesson_number","teacher"],
+                name="unique_lesson_per_date_number_teacher"
             )
         ]
         models.CheckConstraint(

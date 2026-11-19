@@ -1,0 +1,26 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/groupslist.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Список групп{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <div class="mainblock">
+            <div class="groupsgrid">
+                {% for group in groups %}
+                    <div class="profilecard">
+                        <h2>Группа: {{ group.name }}</h2>
+                        <a class="button">Журнал</a>
+                        {% if user.role == "admin" %}
+                            <a class="button">Расписание</a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

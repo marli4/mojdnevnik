@@ -1,0 +1,20 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/groupslist.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - {{ group.name }} Журнал{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <div class="mainblock">
+            <div class="groupsgrid">
+                {% for subject in subjects %}
+                    <a href="{% url 'gradebook' groupid=group.pk subjectid=subject.pk %}" class="button">{{ subject.name }}</a>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
