@@ -14,7 +14,7 @@
                 {% for group in groups %}
                     <div class="profilecard">
                         <h2>Группа: {{ group.name }}</h2>
-                        <a class="button">Журнал</a>
+                        <a href="{% url 'gradebook' groupid=group.pk %}" class="button">Журнал</a>
                         {% if user.role == "admin" %}
                             <a class="button">Расписание</a>
                         {% endif %}

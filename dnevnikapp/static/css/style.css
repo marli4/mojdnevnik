@@ -167,6 +167,7 @@ footer *{
 
 .lessonabsence, .lessongrade{
     text-align: center;
+    word-break: keep-all;
 }
 
 .grade-good{

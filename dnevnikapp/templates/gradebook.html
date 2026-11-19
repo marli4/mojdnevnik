@@ -1,3 +1,68 @@
 {% extends 'baseheader.html' %}
+{% load static %}
+{% load gradebook_tags %}
 
-{% block title %}МойДневник - Журнал{% endblock %}
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/gradebook.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - {{ group.name }} Журнал {{ subject.name }}{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <div>
+            <h1>Журнал</h1>
+            <h2>{{ group.name }}</h2>
+            <h2>{{ subject.name }}</h2>
+        </div>
+        <div class="valueslider">
+            <a href="{% url request.resolver_match.view_name groupid=group.id subjectid=subject.id %}?month={{ prevMonth }}" class="button"><</a>
+            <p>{{ startdate|date:"F Y" }}</p>
+            <a href="{% url request.resolver_match.view_name groupid=group.id subjectid=subject.id %}?month={{ nextMonth }}" class="button">></a>
+        </div>
+        <div class="mainblock gradebook">
+            <table class="">
+                <thead>
+                    <tr>
+                        <th>ФИО</th>
+                        {% for day in days %}
+                            <th>{{ day|date:"d" }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for student in students %}
+                        <tr>
+                            <td>{{ student.last_name }} {{ student.first_name|slice:1 }}. {{ student.patronimic|slice:1 }}.</td>
+                            {% for day in days %}
+                            <td>
+                                {% if student.gradesbyday|get_item:day.day %}
+                                    {% for grade in student.gradesbyday|get_item:day.day %}
+                                        <p class="lessongrade {% if grade.grade >= 4 %}grade-good{% elif grade.grade == 3 %}grade-ok{% elif grade.grade == 2 %}grade-bad{% endif %}">
+                                            {{ grade.grade }}
+                                        </p>
+                                    {% endfor %}
+                                {% else %}
+                                <p></p> 
+                                {% endif %}
+                                {% if student.absencesbyday|get_item:day.day %}
+                                    {% for absence in student.absencesbyday|get_item:day.day %}
+                                            {% if absence.is_excused %}
+                                            <p class="lessonabsence absence-excused">УП</p>
+                                            
+                                            {% else %}
+                                            <p class="lessonabsence absence">Н</p>
+                                            {% endif %}
+                                    {% endfor %}
+                                {% else %}
+                                <p></p>
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

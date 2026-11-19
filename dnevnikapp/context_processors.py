@@ -5,6 +5,7 @@ from .converters import DateConverter
 
 def header_context(request):
     user = request.user
+    links = []
 
     if not user.is_authenticated:
         links = [
@@ -23,7 +24,7 @@ def header_context(request):
         links = [
             {"title":"Главная", "url":reverse("profile")},
             {"title":"Дневник", "url":diary_url},
-            {"title":"Журнал", "url":reverse("profile")},
+            {"title":"Журнал", "url":reverse("gradebook", kwargs={"groupid":request.user.group_id})},
             {"title":"Профиль", "url":reverse("profile")},
         ]
     elif user.role == "parent":

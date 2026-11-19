@@ -1,0 +1,32 @@
+.gradebook{
+    overflow-x:scroll;
+}
+.gradebook table{
+    min-width: max-content;
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.gradebook td{
+    white-space: nowrap;
+    width:35px;
+    border:2px solid var(--additionalcolor);
+}
+.gradebook td > p{
+    height:100%;
+    width: 100%;
+    box-sizing: border-box;
+}
+.studentline{
+    display:flex;
+    align-items: center;
+    justify-content: space-between;
+}
+.student-name{
+    display: flex;
+    align-items: center;
+}
+.student-grades{
+    display: flex;
+    align-items: center;
+}

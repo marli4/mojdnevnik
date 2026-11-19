@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth.views import LoginView
 from .forms import *
 from django.contrib.auth import get_user_model
@@ -6,9 +6,12 @@ from django.contrib.auth.decorators import login_required
 from .decorators import roles_required 
 from .models import *
 from .utils import getWeekStart
-from datetime import timedelta
+from datetime import timedelta, date
 from django.db.models import Prefetch
 from django.core.exceptions import PermissionDenied
+from collections import defaultdict
+import calendar
+from django.urls import reverse
 
 
 User = get_user_model()
@@ -52,7 +55,7 @@ def diaryView(request, date):
                                                         queryset=Absence.objects.filter(student=request.user),
                                                         to_attr="student_absences"
                                                     )
-                                                ).filter(date__gte=weekStart, date__lt=(weekStart + timedelta(days=7)), group=request.user.group
+                                                ).filter(date__gte=weekStart, date__lt=(weekStart + timedelta(days=7)), group_id=request.user.group_id
                                                 ).order_by("date","lesson_number")    
     
     days = {str(i): {"lessons": [None] * 8, "date": weekStart + timedelta(i)} for i in range(7)}
@@ -107,7 +110,7 @@ def lessonsView(request, date):
 @login_required
 def groupSubjectsView(request, groupid):
     if request.user.role == User.Role.STUDENT:
-        if groupid != request.user.group.id:
+        if groupid != request.user.group_id:
             raise PermissionDenied
 
     subjects = Subject.objects.all()
@@ -122,4 +125,57 @@ def gradeBookView(request, groupid, subjectid):
     if request.user.role == User.Role.STUDENT:
         if groupid != request.user.group.id:
             raise PermissionDenied
-    return render(request, "gradebook.html")
+
+    if request.GET.get("month"):
+        month = int(request.GET.get("month"))
+    else:
+        return redirect(reverse("gradebook", kwargs={"groupid":groupid, "subjectid":subjectid}) + "?month=9")
+    year = timezone.localdate().year
+    daysinmonth = calendar.monthrange(year,month)[1]
+    days = [date(year, month, day) for day in range(1, daysinmonth+1)]
+    startdate = days[0]
+    enddate = days[-1]
+
+    prevMonth = 12 if month == 1 else month - 1
+    nextMonth = 1 if month == 12 else month + 1
+        
+    students = list(User.objects.filter(group_id=groupid).order_by("last_name"))
+    grades = list(Grade.objects.select_related("student__group", "lesson__subject"
+                            ).filter(student__group_id=groupid, lesson__subject_id=subjectid, lesson__date__gte=startdate, lesson__date__lte=enddate)
+    )
+    absences = list(Absence.objects.select_related("student__group", "lesson__subject"
+                            ).filter(student__group_id=groupid, lesson__subject_id=subjectid, lesson__date__gte=startdate, lesson__date__lte=enddate)
+    )
+    if grades:
+        group = grades[0].student.group
+        subject = grades[0].lesson.subject
+    else:
+        group = get_object_or_404(Group, pk=groupid)
+        subject = get_object_or_404(Subject, pk=subjectid)
+
+    grades_matrix = defaultdict(lambda: defaultdict(list))
+    for grade in grades:
+        studentid = grade.student_id
+        day = grade.lesson.date.day
+        grades_matrix[studentid][day].append(grade)
+
+    absences_matrix = defaultdict(lambda: defaultdict(list))
+    for absence in absences:
+        studentid = absence.student_id
+        day = absence.lesson.date.day
+        absences_matrix[studentid][day].append(absence)
+
+    for student in students:
+        student.gradesbyday = grades_matrix[student.pk]
+        student.absencesbyday = absences_matrix[student.pk]
+
+    context = {
+        "group": group,
+        "subject": subject,
+        "students":students,
+        "days":days,
+        "startdate":startdate,
+        "prevMonth":prevMonth,
+        "nextMonth":nextMonth,
+    }
+    return render(request, "gradebook.html", context=context)
