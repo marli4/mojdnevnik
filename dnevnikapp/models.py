@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.forms import ValidationError
@@ -149,7 +150,7 @@ class Lesson(models.Model):
 class Grade(models.Model):
     lesson = models.ForeignKey(Lesson, on_delete=models.CASCADE, verbose_name="Занятие", related_name="grades")
     student = models.ForeignKey(CustomUser, on_delete=models.CASCADE, verbose_name="Студент", related_name="grades")
-    grade = models.PositiveSmallIntegerField(verbose_name="Оценка")
+    grade = models.PositiveSmallIntegerField(verbose_name="Оценка",validators=[MinValueValidator(2), MaxValueValidator(5)])
     comment = models.CharField(max_length=150, null=True, blank=True, verbose_name="Комментарий")
     class Meta:
         constraints=[

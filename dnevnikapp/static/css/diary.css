@@ -1,0 +1,42 @@
+.daysgrid{
+    display:grid;
+    grid-template-columns: repeat(3,1fr);
+    gap:94px;
+}
+.day{
+    border-radius: 16px;
+    overflow: hidden;
+    border-style: solid;
+    border-width: 1px;
+    border-color: var(--maincolor);
+}
+.dateline{
+    display:flex;
+    padding:16px;
+    gap:10px;
+    background-color: var(--maincolor);
+}
+
+.lessons{
+    display:flex;
+    flex-direction: column;
+}
+.lesson{
+    display:flex;
+    align-items: center;
+    width:334px;
+}
+.lessonnumber, .lessonabsence, .lessongrade{
+    padding:8px;
+    width:35px;
+    box-sizing: border-box;
+    text-align: center;
+}
+.lessonsubject{
+    padding:8px;
+    box-sizing: border-box;
+    width:100%;
+}
+.lessonnumber{
+    background-color: var(--accentcolor);
+}

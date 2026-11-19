@@ -10,8 +10,58 @@
 {% block content %}
     <div class="centerdiv centerpadding">
         <h1>Дневник</h1>
-        {% for lesson in weekLessons %}
-            {{ lesson.date }}
-        {% endfor %}
+        <div>
+            <div class="daysgrid">
+                {% for daynum, day in days.items %}
+                    <div class="day">
+                        <div class="dateline">
+                            <h2>
+                                {% if daynum == '0' %}
+                                    ПН
+                                {% elif daynum == '1' %}
+                                    ВТ
+                                {% elif daynum == '2' %}
+                                    СР
+                                {% elif daynum == '3' %}
+                                    ЧТ
+                                {% elif daynum == '4' %}
+                                    ПТ
+                                {% elif daynum == '5' %}
+                                    СБ
+                                {% elif daynum == '6' %}
+                                    ВС
+                                {% endif %}
+                            </h2>
+                            <h2>{{ day.date }}</h2>
+                        </div>
+                        <div class="lessons">
+                            {% for lesson in day.lessons %}
+                                <div class="lesson">
+                                    {% if lesson %}
+                                        <p class="lessonnumber">{{ lesson.lesson_number }}</p>
+                                        <p class="lessonsubject">{{ lesson.subject.name }} {{ lesson.room }} каб.</p>
+                                        <p class="lessonabsence">
+                                            {% if lesson.absence %}
+                                                {% if lesson.absence.is_excused %}
+                                                    УП
+                                                {% else %}
+                                                    Н
+                                                {% endif %}
+                                            {% endif %}
+                                        </p>
+                                        <p class="lessongrade">{{ lesson.grade.grade }}</p>
+                                     {% else %}
+                                        <p class="lessonnumber">{{ forloop.counter }}</p>
+                                        <p class="lessonsubject"></p>
+                                        <p class="lessonabsence"></p>
+                                        <p class="lessongrade"></p>
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
     </div>
 {% endblock %}
