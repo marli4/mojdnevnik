@@ -7,6 +7,7 @@ from .decorators import roles_required
 from .models import *
 from .utils import getWeekStart
 from datetime import timedelta, date
+from django.db import transaction
 from django.db.models import Prefetch
 from django.core.exceptions import PermissionDenied
 from collections import defaultdict
@@ -181,15 +182,60 @@ def gradeBookView(request, groupid, subjectid):
     return render(request, "gradebook.html", context=context)
 
 @login_required
-@roles_required("teacher","admin")
+@roles_required("teacher","admin", "student")
 def lessonView(request, lessonid):
-    lesson = Lesson.objects.select_related("subject", "group"
+    lesson = Lesson.objects.select_related("subject", "group", "hometask"
                             ).prefetch_related(
                                 Prefetch("group__students__grades", queryset=Grade.objects.filter(lesson_id=lessonid)), 
-                                Prefetch("group__students__absences", queryset=Absence.objects.filter(lesson_id=lessonid))
+                                Prefetch("group__students__absences", queryset=Absence.objects.filter(lesson_id=lessonid)),
                             ).filter(pk=lessonid).first()
     
+    if lesson == None:
+        return redirect("profile")
+    
     students = lesson.group.students.all()
+
+    if request.method == "POST" and (request.user.role == "teacher" or request.user.role == "admin"):
+        with transaction.atomic():
+            hometasktext = request.POST.get("hometask", "")
+
+            Hometask.objects.update_or_create(lesson=lesson, defaults={"text": hometasktext})
+
+            for student in students:
+
+                # Оценка
+                grade_value = request.POST.get(f"grade_{student.pk}")
+
+                if grade_value:
+                    Grade.objects.update_or_create(
+                        student=student,
+                        lesson=lesson,
+                        defaults={"grade": int(grade_value)}
+                    )
+                else:
+                    Grade.objects.filter(
+                        student=student,
+                        lesson=lesson
+                    ).delete()
+
+                # Пропуск
+                absence_value = request.POST.get(f"absence_{student.pk}")
+
+                if absence_value:
+                    Absence.objects.update_or_create(
+                        student=student,
+                        lesson=lesson,
+                        defaults={
+                            "is_excused": absence_value == "УП"
+                        }
+                    )
+                else:
+                    Absence.objects.filter(
+                        student=student,
+                        lesson=lesson
+                    ).delete()
+        return redirect("lessons", lessonid=lesson.pk)
+
     for student in students:
         student.grade = student.grades.first()
         student.absence = student.absences.first()
@@ -197,5 +243,5 @@ def lessonView(request, lessonid):
         "lesson":lesson,
         "students":students,
     }
-
+    
     return render(request, "lesson.html", context=context)

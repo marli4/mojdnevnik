@@ -1,0 +1,77 @@
+.mainform{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    gap:16px;
+}
+.lesson-studentsgrid{
+    display:grid;
+    grid-template-columns: repeat(4,1fr);
+    width:100%;
+}
+.lesson-student{
+    display: flex;
+    align-items: center;
+    gap:4px;
+}
+.lessongrade, .lessonabsence{
+    content:'';
+    padding:8px;
+    width:32px;
+    height:35px;
+    box-sizing: border-box;
+}
+button{
+    border-radius: 0;
+    border-style: none;
+}
+
+
+.lesson-modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 1000;
+
+    background: rgba(0, 0, 0, 0.55);
+
+    justify-content: center;
+    align-items: center;
+
+    padding: 20px;
+}
+
+.lesson-modal-content {
+    background: var(--maincolor);
+    color: var(--textcolor);
+
+    padding: 32px;
+    border-radius: 16px;
+
+    width: 100%;
+    max-width: 350px;
+
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.lesson-modal-content h2 {
+    text-align: center;
+    margin: 0 0 10px;
+}
+
+.grade-options,
+.absence-options {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.lessongrade:hover,
+.lessonabsence:hover {
+    transform: scale(1.05);
+}

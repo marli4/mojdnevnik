@@ -17,23 +17,36 @@
             <h3>{{ lesson.room }} кабинет</h3>
         </div>
         <div class="mainblock">
-            <form>
+            <form class="mainform" method="post">
                 {% csrf_token %}
-                <textarea name="hometask"></textarea>
+                <textarea name="hometask" placeholder="Домашнее задание">{{ lesson.hometask.text }}</textarea>
                 <div class="lesson-studentsgrid">
                     {% for student in students %}
                         <div class="lesson-student">
                             <p>{{ student.last_name }} {{ student.first_name|slice:1 }}. {{ student.patronimic|slice:1 }}.</p>
-                            <button type="button">{{ student.grade.grade }}</button>
-                            <button type="button">
+                            <button type="button"
+                                class="lessongrade {% if student.grade.grade >= 4 %}grade-good{% elif student.grade.grade == 3 %}grade-ok{% elif student.grade.grade == 2 %}grade-bad{% endif %}"
+                                data-student="{{ student.pk }}"
+                                data-value="{{ student.grade.grade|default_if_none:'' }}"
+                            >
+                                {{ student.grade.grade|default:"" }}
+                            </button>
+                            <input type="hidden" name="grade_{{ student.pk }}" value="{{ student.grade.grade|default_if_none:'' }}">
+
+                            <button type="button" 
+                                class="lessonabsence {% if student.absence %}{% if student.absence.is_excused %}absence-excused{% else %}absence{% endif %}{% endif %}"
+                                data-student="{{ student.pk }}"
+                                data-value="{% if student.absence %}{% if student.absence.is_excused %}УП{% else %}Н{% endif %}{% endif %}"
+                            >
                                 {% if student.absence %}
                                     {% if student.absence.is_excused %}
-                                    УП
+                                        УП
                                     {% else %}
-                                    Н
+                                        Н
                                     {% endif %}
                                 {% endif %}
                             </button>
+                            <input type="hidden" name="absence_{{ student.pk }}" value="{% if student.absence %}{% if student.absence.is_excused %}УП{% else %}Н{% endif %}{% endif %}">
                         </div>
                     {% endfor %}
                 </div>
@@ -41,4 +54,38 @@
             </form>
         </div>
     </div>
+
+    <div class="lesson-modal" id="gradeModal">
+        <div class="lesson-modal-content">
+            <h2>Выберите оценку</h2>
+
+            <div class="grade-options">
+                <button class="button" type="button" data-grade="2">2</button>
+                <button class="button" type="button" data-grade="3">3</button>
+                <button class="button" type="button" data-grade="4">4</button>
+                <button class="button" type="button" data-grade="5">5</button>
+            </div>
+
+            <button type="button" class="modal-remove button" data-grade="">Убрать оценку</button>
+            <button type="button" class="modal-close button">Закрыть</button>
+        </div>
+    </div>
+
+    <div class="lesson-modal" id="absenceModal">
+        <div class="lesson-modal-content">
+            <h2>Отметить пропуск</h2>
+
+            <div class="absence-options">
+                <button class="button" type="button" data-absence="Н">Н — неуважительный</button>
+                <button class="button" type="button" data-absence="УП">УП — уважительный</button>
+            </div>
+
+            <button type="button" class="modal-remove button errorbutton" data-absence="">Убрать пропуск</button>
+            <button type="button" class="modal-close button">Закрыть</button>
+        </div>
+    </div>
+{% endblock %}
+
+{% block scripts %}
+<script src="{% static 'scripts/gradeformappear.js' %}"></script>
 {% endblock %}
