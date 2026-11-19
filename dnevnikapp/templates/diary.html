@@ -1,0 +1,17 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/diary.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Дневник{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <h1>Дневник</h1>
+        {% for lesson in weekLessons %}
+            {{ lesson.date }}
+        {% endfor %}
+    </div>
+{% endblock %}

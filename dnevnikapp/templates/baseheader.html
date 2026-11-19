@@ -6,7 +6,7 @@
         <nav>
             <ul>
                 {% for link in headerlinks %}
-                    <li><a href="{% url link.url %}" class="button">{{ link.title }}</a></li>
+                    <li><a href="{{ link.url }}" class="button">{{ link.title }}</a></li>
                 {% endfor %}
             </ul>
         </nav>

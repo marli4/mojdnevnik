@@ -9,6 +9,6 @@ def roles_required(*roles):
                 return redirect('login')
             if request.user.role not in roles:
                 raise PermissionDenied
-            return func(*args, **kwargs)
+            return func(request, *args, **kwargs)
         return wrapper
     return decorator

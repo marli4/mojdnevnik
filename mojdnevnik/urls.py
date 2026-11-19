@@ -15,11 +15,17 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import path, register_converter
 from dnevnikapp import views
+from django.contrib.auth import views as auth_views
+from dnevnikapp import converters
+
+register_converter(converters.DateConverter, "ddmmyyyy")
 
 urlpatterns = [
-    path('profile/',views.profileview, name="profile"),
-    path('login/',views.MyLoginView.as_view(), name="login"),
-    path('admin/', admin.site.urls, name="admin"),
+    path("profile/",views.profileview, name="profile"),
+    path("diary/<ddmmyyyy:date>/", views.diaryView, name="diary"),
+    path("login/",views.MyLoginView.as_view(), name="login"),
+    path("logout/", auth_views.LogoutView.as_view(), name="logout"),
+    path("admin/", admin.site.urls, name="admin"),
 ]

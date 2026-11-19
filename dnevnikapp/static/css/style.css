@@ -104,6 +104,17 @@ header ul{
     justify-content: space-between;
     align-items: center;
 }
+
+footer{
+    background-color: var(--maincolor);
+    padding:100px 122px 100px 122px;
+    color:var(--backgroundcolor);
+    text-align: center;
+}
+footer *{
+    font-size: 32px;
+}
+
 .centerdiv{
     display:flex;
     flex-direction: column;

@@ -22,7 +22,10 @@
                         <h2>Группа: {{ user.group.name }}</h2>
                     {% endif %}
                     <a class="button">Сменить пароль</a>
-                    <a class="button">Выход</a>
+                    <form method="post" action="{% url 'logout' %}">
+                        {% csrf_token %}
+                        <button class="button">Выход</button>
+                    </form>
                 </div>
                 <div class="buttonscolumn">
                     {% if user.role == "student" %}
@@ -43,7 +46,7 @@
                 <div class="notifications">
                     {% for notification in notifications %}
                         <div class="notification">
-                            <h2>{{ notification.created_at }}</h2>
+                            <h2>{{ notification.created_at|date:"d.m.Y" }}</h2>
                             <p>{{ notification.text }}</p>
                         </div>
                     {% endfor %}

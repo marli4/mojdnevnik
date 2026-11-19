@@ -8,6 +8,10 @@ from django.core.exceptions import PermissionDenied
 from django.contrib.auth.decorators import login_required
 from .decorators import roles_required 
 from .models import *
+from .utils import getWeekStart
+from datetime import timedelta
+from datetime import datetime
+
 
 User = get_user_model()
 
@@ -31,3 +35,18 @@ def profileview(request):
     }
     return render(request, "profile.html", context)
 
+@login_required
+@roles_required("student")
+def diaryView(request, date):
+    day=date
+    weekStart = getWeekStart(day)
+    nextWeekStart = weekStart + timedelta(weeks=1)
+    prevWeekStart = weekStart - timedelta(weeks=1)
+
+    weekLessons = Lesson.objects.filter(date__gte=weekStart, date__lt=(weekStart + timedelta(days=7)))
+
+    context = {
+        "weekLessons":weekLessons,
+    }
+
+    return render(request, "diary.html", context)
