@@ -179,3 +179,23 @@ def gradeBookView(request, groupid, subjectid):
         "nextMonth":nextMonth,
     }
     return render(request, "gradebook.html", context=context)
+
+@login_required
+@roles_required("teacher","admin")
+def lessonView(request, lessonid):
+    lesson = Lesson.objects.select_related("subject", "group"
+                            ).prefetch_related(
+                                Prefetch("group__students__grades", queryset=Grade.objects.filter(lesson_id=lessonid)), 
+                                Prefetch("group__students__absences", queryset=Absence.objects.filter(lesson_id=lessonid))
+                            ).filter(pk=lessonid).first()
+    
+    students = lesson.group.students.all()
+    for student in students:
+        student.grade = student.grades.first()
+        student.absence = student.absences.first()
+    context = {
+        "lesson":lesson,
+        "students":students,
+    }
+
+    return render(request, "lesson.html", context=context)

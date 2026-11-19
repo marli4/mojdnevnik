@@ -1,0 +1,44 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/lesson.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Занятие{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <div class="headingsdiv">
+            <h1>Занятие</h1>
+            <h2>{{ lesson.lesson_number }} пара {{ lesson.date }}</h2>
+            <h2>{{ lesson.subject }}</h2>
+            <h3>{{ lesson.group }}</h3>
+            <h3>{{ lesson.room }} кабинет</h3>
+        </div>
+        <div class="mainblock">
+            <form>
+                {% csrf_token %}
+                <textarea name="hometask"></textarea>
+                <div class="lesson-studentsgrid">
+                    {% for student in students %}
+                        <div class="lesson-student">
+                            <p>{{ student.last_name }} {{ student.first_name|slice:1 }}. {{ student.patronimic|slice:1 }}.</p>
+                            <button type="button">{{ student.grade.grade }}</button>
+                            <button type="button">
+                                {% if student.absence %}
+                                    {% if student.absence.is_excused %}
+                                    УП
+                                    {% else %}
+                                    Н
+                                    {% endif %}
+                                {% endif %}
+                            </button>
+                        </div>
+                    {% endfor %}
+                </div>
+                <button class="button">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+{% endblock %}

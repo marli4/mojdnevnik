@@ -3,6 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 from django.utils import timezone
 from django.forms import ValidationError
+from django.urls import reverse
 
 class CustomUser(AbstractUser):
     class Role(models.TextChoices):
@@ -15,7 +16,7 @@ class CustomUser(AbstractUser):
     last_name=models.CharField(max_length=30, null=False, blank=False, verbose_name="Фамилия")
     patronimic = models.CharField(max_length=30, null=True, blank=True, verbose_name="Отчество")
     role = models.TextField(choices=Role.choices, default=Role.STUDENT, null=True, blank=True, verbose_name="Роль")
-    group = models.ForeignKey("Group", null=True, blank=True, verbose_name="Группа", default=None, on_delete=models.SET_NULL)
+    group = models.ForeignKey("Group", null=True, blank=True, verbose_name="Группа", default=None, related_name="students", on_delete=models.SET_NULL)
     subjects = models.ManyToManyField("Subject", through="TeacherSubject", verbose_name="Преподаваемые предметы", blank=True)
     parents = models.ManyToManyField("self", through="ParentChild", null=True, related_name="children", symmetrical=False, verbose_name="Родители", through_fields=("child","parent"))
     REQUIRED_FIELDS=["first_name", "last_name"]
@@ -147,6 +148,8 @@ class Lesson(models.Model):
             raise ValidationError({
                 "lesson_number": "Пара не может быть меньше 1"
             })
+    def get_absolute_url(self):
+        return reverse("lessons", kwargs={"lessonid":self.pk})
 
     def __str__(self):
         return str(self.subject) + ' ' + str(self.date) + ' ' + str(self.lesson_number)

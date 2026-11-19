@@ -21,6 +21,9 @@
     color:var(--textcolor);
 }
 
+a{
+    text-decoration: none;
+}
 h1{
     font-size: var(--h1size);
     font-weight:normal;
@@ -124,9 +127,16 @@ footer *{
     align-items: center;
     row-gap: 150px;
 }
+.centerdiv > h1, .centerdiv > h2, .centerdiv > h3{
+    text-align: center;
+}
 .centerpadding{
     padding:150px 30px 150px 30px;
 }
+.headingsdiv{
+    text-align: center;
+}
+
 .mainblock{
     box-sizing: border-box;
     background-color: var(--maincolor);

@@ -29,6 +29,7 @@ urlpatterns = [
     path("groups/<int:groupid>/gradebook/",views.groupSubjectsView,name="gradebook"),
     path("groups/<int:groupid>/gradebook/<int:subjectid>/",views.gradeBookView,name="gradebook"),
     path("lessons/<ddmmyyyy:date>/",views.lessonsView, name="lessons"),
+    path("lessons/<int:lessonid>/", views.lessonView, name="lessons"),
     path("login/",views.MyLoginView.as_view(), name="login"),
     path("logout/", auth_views.LogoutView.as_view(), name="logout"),
     path("admin/", admin.site.urls, name="admin"),

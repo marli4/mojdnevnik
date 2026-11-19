@@ -41,7 +41,7 @@
                         </div>
                         <div class="lessons">
                             {% for lesson in day.lessons %}
-                                <div class="lesson">
+                                <a href="{{ lesson.get_absolute_url }}" class="lesson">
                                     {% if lesson %}
                                         <p class="lessonnumber">{{ lesson.lesson_number }}</p>
                                         <p class="lessonsubject">{{ lesson.subject.name }} {{ lesson.room }} каб.</p>
@@ -52,7 +52,7 @@
                                         <p class="lessonabsence"></p>
                                         <p class="lessongrade"></p>
                                     {% endif %}
-                                </div>
+                                </a>
                             {% endfor %}
                         </div>
                     </div>
