@@ -10,7 +10,7 @@
 {% block content %}
     <div class="centerdiv centerpadding">
         <div class="mainblock">
-            <div class="groupsgrid">
+            <div class="subjectsgrid">
                 {% for subject in subjects %}
                     <a href="{% url 'gradebook' groupid=group.pk subjectid=subject.pk %}" class="button">{{ subject.name }}</a>
                 {% endfor %}
