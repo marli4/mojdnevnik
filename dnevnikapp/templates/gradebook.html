@@ -38,9 +38,9 @@
                             <td class="day">
                                 {% if student.gradesbyday|get_item:day.day %}
                                     {% for grade in student.gradesbyday|get_item:day.day %}
-                                        <p class="lessongrade {% if grade.grade >= 4 %}grade-good{% elif grade.grade == 3 %}grade-ok{% elif grade.grade == 2 %}grade-bad{% endif %}">
+                                        <a href="{{ grade.get_lesson_url }}" class="lessongrade {% if grade.grade >= 4 %}grade-good{% elif grade.grade == 3 %}grade-ok{% elif grade.grade == 2 %}grade-bad{% endif %}">
                                             {{ grade.grade }}
-                                        </p>
+                                        </a>
                                     {% endfor %}
                                 {% else %}
                                 <p></p> 
@@ -48,10 +48,9 @@
                                 {% if student.absencesbyday|get_item:day.day %}
                                     {% for absence in student.absencesbyday|get_item:day.day %}
                                             {% if absence.is_excused %}
-                                            <p class="lessonabsence absence-excused">УП</p>
-                                            
+                                            <a href="{{ absence.get_lesson_url }}" class="lessonabsence absence-excused">УП</a>
                                             {% else %}
-                                            <p class="lessonabsence absence">Н</p>
+                                            <a href="{{ absence.get_lesson_url }}" class="lessonabsence absence">Н</a>
                                             {% endif %}
                                     {% endfor %}
                                 {% else %}

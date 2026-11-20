@@ -181,6 +181,8 @@ class Grade(models.Model):
                 raise ValidationError({
                     "student": "Студент не состоит в группе, для которой проводится это занятие."
                 })
+    def get_lesson_url(self):
+        return self.lesson.get_absolute_url()
 
     def __str__(self):
         return str(self.student) + ' ' + str(self.lesson) + ' ' + str(self.grade)
@@ -212,6 +214,8 @@ class Absence(models.Model):
                 raise ValidationError({
                     "student": "Студент не состоит в группе, для которой проводится это занятие."
                 })
+    def get_lesson_url(self):
+        return self.lesson.get_absolute_url()
 
     def __str__(self):
         return str(self.student) + ' ' + str(self.lesson)

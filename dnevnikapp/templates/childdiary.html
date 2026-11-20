@@ -1,0 +1,26 @@
+{% extends 'diarybase.html' %}
+{% load static %}
+
+{% block title %}МойДневник - Дневник {{ child.first_name }}{% endblock %}
+
+{% block firstsliderutton %}
+    <a href="{% url request.resolver_match.view_name childid=child.pk date=prevWeekStart %}" class="button"><</a>
+{% endblock %}
+
+{% block secondsliderbutton %}
+    <a href="{% url request.resolver_match.view_name childid=child.pk date=nextWeekStart %}" class="button">></a>
+{% endblock %}
+
+{% block lessonadditional %}
+    {% if lesson.absence %}
+        <p class="lessonabsence {% if lesson.absence.is_excused %}absence-excused{% else %}absence{% endif %}">
+            {% if lesson.absence.is_excused %}
+                УП
+            {% else %}
+                Н
+            {% endif %}
+        </p>
+    {% else %} <p class="lessonabsence"></p>
+    {% endif %}
+    <p class="lessongrade {% if lesson.grade.grade >= 4 %}grade-good{% elif lesson.grade.grade == 3 %}grade-ok{% elif lesson.grade.grade == 2 %}grade-bad{% endif %}">{{ lesson.grade.grade }}</p>
+{% endblock %}

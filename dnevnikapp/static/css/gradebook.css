@@ -17,6 +17,12 @@
     width: 100%;
     box-sizing: border-box;
 }
+.gradebook td > a{
+    display: block;
+    height:100% !important;
+    width: 100% !important;
+    box-sizing: border-box;
+}
 .studentline{
     display:flex;
     align-items: center;

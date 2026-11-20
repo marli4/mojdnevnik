@@ -11,9 +11,13 @@
     <div class="centerdiv centerpadding">
         <h1>{% block heading %}Дневник{% endblock %}</h1>
         <div class="valueslider">
-            <a href="{% url request.resolver_match.view_name date=prevWeekStart %}" class="button"><</a>
+            {% block firstsliderutton %}
+                <a href="{% url request.resolver_match.view_name date=prevWeekStart %}" class="button"><</a>
+            {% endblock %}
             <p>Неделя {{ weeknum }}</p>
-            <a href="{% url request.resolver_match.view_name date=nextWeekStart %}" class="button">></a>
+            {% block secondsliderbutton %}
+                <a href="{% url request.resolver_match.view_name date=nextWeekStart %}" class="button">></a>
+            {% endblock %}
         </div>
         <div>
             <div class="daysgrid">

@@ -29,15 +29,15 @@
                 </div>
                 <div class="buttonscolumn">
                     {% if user.role == "student" %}
-                        <a class="button">Дневник</a>
-                        <a class="button">Журнал</a>
+                        <a href="{% url 'diary' %}" class="button">Дневник</a>
+                        <a href="{% url 'gradebook' %}" class="button">Журнал</a>
                     {% elif user.role == "parent" %}
-                        <a class="button">Дети</a>
+                        <a href="{% url 'children' %}" class="button">Дети</a>
                     {% elif user.role == "teacher" %}
-                        <a class="button">Занятия</a>
-                        <a class="button">Группы</a>
+                        <a href="{% url 'lessons' %}" class="button">Занятия</a>
+                        <a href="{% url 'groups' %}" class="button">Группы</a>
                     {% elif user.role == "admin" %}
-                        <a class="button">Группы</a>
+                        <a href="{% url 'groups' %}" class="button">Группы</a>
                     {% endif %}
                 </div>
             </div>

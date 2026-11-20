@@ -113,6 +113,14 @@ def groupSubjectsView(request, groupid):
     if request.user.role == User.Role.STUDENT:
         if groupid != request.user.group_id:
             raise PermissionDenied
+    elif request.user.role == User.Role.PARENT:
+        children = request.user.children.all()
+        nochildren = True
+        for child in children:
+            if child.group_id == groupid:
+                nochildren=False
+        if nochildren:
+            raise PermissionDenied
 
     subjects = Subject.objects.all()
     context={
@@ -182,7 +190,7 @@ def gradeBookView(request, groupid, subjectid):
     return render(request, "gradebook.html", context=context)
 
 @login_required
-@roles_required("teacher","admin", "student")
+@roles_required("teacher","admin", "student", "parent")
 def lessonView(request, lessonid):
     lesson = Lesson.objects.select_related("subject", "group", "hometask"
                             ).prefetch_related(
@@ -202,7 +210,6 @@ def lessonView(request, lessonid):
             Hometask.objects.update_or_create(lesson=lesson, defaults={"text": hometasktext})
 
             for student in students:
-                # Оценка
                 grade_value = request.POST.get(f"grade_{student.pk}")
 
                 updatedOrCreatedGrade=None
@@ -218,7 +225,6 @@ def lessonView(request, lessonid):
                         lesson=lesson
                     ).delete()
 
-                # Пропуск
                 absence_value = request.POST.get(f"absence_{student.pk}")
 
                 updatedOrCreatedAbsence=None
@@ -239,8 +245,7 @@ def lessonView(request, lessonid):
                 if updatedOrCreatedGrade and updatedOrCreatedGrade[1]:
                     Notification.objects.create(user=student, text="Новая оценка: " + str(updatedOrCreatedGrade[0]))
                 if updatedOrCreatedAbsence and updatedOrCreatedAbsence[1]:
-                    Notification.objects.create(user=student, text="Новый пропуск: " + str(updatedOrCreatedAbsence[0]))
-            
+                    Notification.objects.create(user=student, text="Новый пропуск: " + str(updatedOrCreatedAbsence[0]))  
         return redirect("lessons", lessonid=lesson.pk)
 
     for student in students:
@@ -250,5 +255,65 @@ def lessonView(request, lessonid):
         "lesson":lesson,
         "students":students,
     }
+    if request.user.role == "teacher" or request.user.role == "admin":
+        return render(request, "lesson.html", context=context)
+    elif request.user.role == "student" or request.user.role == "parent":
+        return render(request, "lessonstudent.html", context=context)
+
+@login_required
+@roles_required("parent")
+def childrenView(request):
+    children = request.user.children.all()
+    context={
+        "children":children,
+    }
+    return render(request, "children.html", context=context)
+
+@login_required
+@roles_required("parent")
+def childDiaryViewWithoutDate(request, childid):
+    date=timezone.localdate()
+    return redirect("childrendiary", childid=childid, date=date)
+
+@login_required
+@roles_required("parent")
+def childDiaryView(request, childid, date):
+    weekStart = getWeekStart(date)
+    nextWeekStart = weekStart + timedelta(weeks=1)
+    prevWeekStart = weekStart - timedelta(weeks=1)
+
+    child = request.user.children.filter(pk=childid).first()
+    if child == None:
+        raise PermissionDenied
+
+    weekLessons = Lesson.objects.select_related("subject", "teacher"
+                                                ).prefetch_related(
+                                                    Prefetch(
+                                                        "grades",
+                                                        queryset=Grade.objects.filter(student_id=childid),
+                                                        to_attr="student_grades"
+                                                    ),
+                                                    Prefetch(
+                                                        "absences",
+                                                        queryset=Absence.objects.filter(student_id=childid),
+                                                        to_attr="student_absences"
+                                                    )
+                                                ).filter(date__gte=weekStart, date__lt=(weekStart + timedelta(days=7)), group_id=child.group_id
+                                                ).order_by("date","lesson_number")    
     
-    return render(request, "lesson.html", context=context)
+    days = {str(i): {"lessons": [None] * 8, "date": weekStart + timedelta(i)} for i in range(7)}
+    for lesson in weekLessons:
+        lesson.grade = lesson.student_grades[0] if lesson.student_grades else None
+        lesson.absence = lesson.student_absences[0] if lesson.student_absences else None
+        
+        daynum = (lesson.date - weekStart).days
+        days[str(daynum)]["lessons"][lesson.lesson_number-1] = lesson
+
+    context = {
+        "days":days,
+        "prevWeekStart":prevWeekStart,
+        "nextWeekStart":nextWeekStart,
+        "weeknum":date.isocalendar().week,
+        "child":child
+    }
+    return render(request, "childdiary.html", context)

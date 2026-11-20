@@ -1,0 +1,25 @@
+{% extends 'baseheader.html' %}
+{% load static %}
+
+{% block head %}
+    <link rel="stylesheet" href="{% static 'css/groupslist.css' %}">
+{% endblock %}
+
+{% block title %}МойДневник - Дети{% endblock %}
+
+{% block content %}
+    <div class="centerdiv centerpadding">
+        <h1>Дети</h1>
+        <div class="mainblock">
+            <div class="groupsgrid">
+                {% for child in children %}
+                    <div class="profilecard">
+                        <h2>{{ child.last_name }} {{ child.first_name }} {{ child.patronimic }}</h2>
+                        <a class="button" href="{% url 'children' childid=child.pk %}" >Дневник</a>
+                        <a class="button" href="{% url 'gradebook' groupid=child.group_id %}">Журнал</a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

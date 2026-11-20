@@ -20,7 +20,6 @@ def header_context(request):
 
     elif user.role == "student":
         today = timezone.localdate()
-        diary_url = reverse("diary", kwargs={"date": today})
         links = [
             {"title":"Главная", "url":reverse("profile")},
             {"title":"Дневник", "url":diary_url},
@@ -30,12 +29,11 @@ def header_context(request):
     elif user.role == "parent":
         links = [
             {"title":"Главная", "url":reverse("profile")},
-            {"title":"Дети", "url":reverse("profile")},
+            {"title":"Дети", "url":reverse("children")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
     elif user.role == "teacher":
         today = timezone.localdate()
-        diary_url = reverse("diary", kwargs={"date": today})
         links = [
             {"title":"Главная", "url":reverse("profile")},
             {"title":"Занятия", "url":reverse("lessons", kwargs={"date": today})},
