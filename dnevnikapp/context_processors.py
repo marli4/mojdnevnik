@@ -6,7 +6,7 @@ from .converters import DateConverter
 def header_context(request):
     user = request.user
     links = []
-
+    today = timezone.localdate()
     if not user.is_authenticated:
         links = [
             {"title":"Вход", "url":reverse("login")},
@@ -19,10 +19,9 @@ def header_context(request):
         ]
 
     elif user.role == "student":
-        today = timezone.localdate()
         links = [
             {"title":"Главная", "url":reverse("profile")},
-            {"title":"Дневник", "url":diary_url},
+            {"title":"Дневник", "url":reverse("diary", kwargs={"date": today})},
             {"title":"Журнал", "url":reverse("gradebook", kwargs={"groupid":request.user.group_id})},
             {"title":"Профиль", "url":reverse("profile")},
         ]
@@ -40,4 +39,4 @@ def header_context(request):
             {"title":"Группы", "url":reverse("groups")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
-    return {"headerlinks":links}
+    return {"headerlinks":links, "today":today}

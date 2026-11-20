@@ -10,6 +10,7 @@ from datetime import timedelta, date
 from django.db import transaction
 from django.db.models import Prefetch
 from django.core.exceptions import PermissionDenied
+from django.http import Http404
 from collections import defaultdict
 import calendar
 from django.urls import reverse
@@ -134,6 +135,10 @@ def gradeBookView(request, groupid, subjectid):
     if request.user.role == User.Role.STUDENT:
         if groupid != request.user.group.id:
             raise PermissionDenied
+    elif request.user.role == User.Role.PARENT:
+        children = request.user.children.filter(group_id=groupid)
+        if children == None:
+            raise PermissionDenied
 
     if request.GET.get("month"):
         month = int(request.GET.get("month"))
@@ -199,7 +204,12 @@ def lessonView(request, lessonid):
                             ).filter(pk=lessonid).first()
     
     if lesson == None:
-        return redirect("profile")
+        raise Http404
+
+    if request.user.role == "student" and request.user.group_id != lesson.group_id:
+        raise PermissionDenied
+    elif request.user.role == "parent" and request.user.children.filter(group_id=lesson.group_id).first() == None:
+        raise PermissionDenied
     
     students = lesson.group.students.all()
 
@@ -263,7 +273,7 @@ def lessonView(request, lessonid):
 @login_required
 @roles_required("parent")
 def childrenView(request):
-    children = request.user.children.all()
+    children = request.user.children.select_related("group").all()
     context={
         "children":children,
     }

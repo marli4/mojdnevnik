@@ -15,6 +15,7 @@
                 {% for child in children %}
                     <div class="profilecard">
                         <h2>{{ child.last_name }} {{ child.first_name }} {{ child.patronimic }}</h2>
+                        <h2>{{ child.group.name }}</h2>
                         <a class="button" href="{% url 'children' childid=child.pk %}" >Дневник</a>
                         <a class="button" href="{% url 'gradebook' groupid=child.group_id %}">Журнал</a>
                     </div>

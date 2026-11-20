@@ -29,8 +29,8 @@
                 </div>
                 <div class="buttonscolumn">
                     {% if user.role == "student" %}
-                        <a href="{% url 'diary' %}" class="button">Дневник</a>
-                        <a href="{% url 'gradebook' %}" class="button">Журнал</a>
+                        <a href="{% url 'diary' date=today %}" class="button">Дневник</a>
+                        <a href="{% url 'gradebook' groupid=request.user.group_id %}" class="button">Журнал</a>
                     {% elif user.role == "parent" %}
                         <a href="{% url 'children' %}" class="button">Дети</a>
                     {% elif user.role == "teacher" %}
