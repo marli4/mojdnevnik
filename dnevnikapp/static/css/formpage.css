@@ -14,3 +14,7 @@ form{
     row-gap: 64px;
     height:100vh;
 }
+.nonfielderrors ul li{
+    list-style-type: none;
+    color:var(--errorcolor)!important;
+}

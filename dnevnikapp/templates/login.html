@@ -12,8 +12,12 @@
         <h1>Авторизация</h1>
         <form method="post">
             {% csrf_token %}
+            <div class="nonfielderrors">
+                {{ form.non_field_errors }}
+            </div>
             {% for field in form %}
                 {{ field }}
+                {{ field.errors }}
             {% endfor %}
             <button class="button">Вход</button>
         </form>
