@@ -29,7 +29,7 @@ def profileview(request):
         )
     else:
         user = request.user
-    notifications = Notification.objects.filter(user=user)
+    notifications = Notification.objects.filter(user=user).order_by("-created_at")
 
     context = {
         "user":user,
@@ -202,12 +202,12 @@ def lessonView(request, lessonid):
             Hometask.objects.update_or_create(lesson=lesson, defaults={"text": hometasktext})
 
             for student in students:
-
                 # Оценка
                 grade_value = request.POST.get(f"grade_{student.pk}")
 
+                updatedOrCreatedGrade=None
                 if grade_value:
-                    Grade.objects.update_or_create(
+                    updatedOrCreatedGrade = Grade.objects.update_or_create(
                         student=student,
                         lesson=lesson,
                         defaults={"grade": int(grade_value)}
@@ -221,8 +221,9 @@ def lessonView(request, lessonid):
                 # Пропуск
                 absence_value = request.POST.get(f"absence_{student.pk}")
 
+                updatedOrCreatedAbsence=None
                 if absence_value:
-                    Absence.objects.update_or_create(
+                    updatedOrCreatedAbsence = Absence.objects.update_or_create(
                         student=student,
                         lesson=lesson,
                         defaults={
@@ -234,6 +235,12 @@ def lessonView(request, lessonid):
                         student=student,
                         lesson=lesson
                     ).delete()
+
+                if updatedOrCreatedGrade and updatedOrCreatedGrade[1]:
+                    Notification.objects.create(user=student, text="Новая оценка: " + str(updatedOrCreatedGrade[0]))
+                if updatedOrCreatedAbsence and updatedOrCreatedAbsence[1]:
+                    Notification.objects.create(user=student, text="Новый пропуск: " + str(updatedOrCreatedAbsence[0]))
+            
         return redirect("lessons", lessonid=lesson.pk)
 
     for student in students:
