@@ -13,28 +13,28 @@ def header_context(request):
         ]
     elif user.role == "admin":
         links = [
-            {"title":"Главная", "url":reverse("profile")},
+            {"title":"Главная", "url":reverse("home")},
             {"title":"Группы", "url":reverse("groups")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
 
     elif user.role == "student":
         links = [
-            {"title":"Главная", "url":reverse("profile")},
+            {"title":"Главная", "url":reverse("home")},
             {"title":"Дневник", "url":reverse("diary", kwargs={"date": today})},
             {"title":"Журнал", "url":reverse("gradebook", kwargs={"groupid":request.user.group_id})},
             {"title":"Профиль", "url":reverse("profile")},
         ]
     elif user.role == "parent":
         links = [
-            {"title":"Главная", "url":reverse("profile")},
+            {"title":"Главная", "url":reverse("home")},
             {"title":"Дети", "url":reverse("children")},
             {"title":"Профиль", "url":reverse("profile")},
         ]
     elif user.role == "teacher":
         today = timezone.localdate()
         links = [
-            {"title":"Главная", "url":reverse("profile")},
+            {"title":"Главная", "url":reverse("home")},
             {"title":"Занятия", "url":reverse("lessons", kwargs={"date": today})},
             {"title":"Группы", "url":reverse("groups")},
             {"title":"Профиль", "url":reverse("profile")},

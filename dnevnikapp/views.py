@@ -21,6 +21,9 @@ User = get_user_model()
 class MyLoginView(LoginView):
     template_name="login.html"
     authentication_form=MyLoginForm
+    
+def indexView(request):
+    return render(request,"index.html")
 
 @login_required
 def profileview(request):

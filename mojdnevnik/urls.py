@@ -23,6 +23,8 @@ from dnevnikapp import converters
 register_converter(converters.DateConverter, "ddmmyyyy")
 
 urlpatterns = [
+    path('', views.indexView, name="home"),
+
     path("profile/",views.profileview, name="profile"),
     path("diary/<ddmmyyyy:date>/", views.diaryView, name="diary"),
 
