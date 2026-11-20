@@ -21,7 +21,7 @@ User = get_user_model()
 class MyLoginView(LoginView):
     template_name="login.html"
     authentication_form=MyLoginForm
-    
+
 def indexView(request):
     return render(request,"index.html")
 
@@ -219,7 +219,10 @@ def lessonView(request, lessonid):
     if request.method == "POST" and (request.user.role == "teacher" or request.user.role == "admin"):
         with transaction.atomic():
             hometasktext = request.POST.get("hometask", "")
+            primechaniyetext = request.POST.get("primechaniye", "")
 
+            lesson.primechaniye = primechaniyetext
+            lesson.save()
             Hometask.objects.update_or_create(lesson=lesson, defaults={"text": hometasktext})
 
             for student in students:

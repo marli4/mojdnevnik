@@ -15,12 +15,14 @@
             <h2>{{ lesson.subject }}</h2>
             <h3>{{ lesson.group }}</h3>
             <h3>{{ lesson.room }} кабинет</h3>
+            <h3>{{ lesson.teacher.last_name }} {{ lesson.teacher.first_name|slice:1 }}. {{ lesson.teacher.patronimic|slice:1 }}</h3>
         </div>
         <div class="mainblock">
             <form class="mainform">
                 {% csrf_token %}
                 <h3>Домашнее задание</h3>
                 <textarea readonly disabled name="hometask" placeholder="Домашнее задание">{{ lesson.hometask.text }}</textarea>
+                <textarea readonly disabled name="primechaniye" placeholder="Примечание">{{ lesson.primechaniye }}</textarea>
                 <div class="lesson-studentsgrid">
                     {% for student in students %}
                         <div class="lesson-student">

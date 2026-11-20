@@ -118,6 +118,7 @@ class Lesson(models.Model):
     date = models.DateField(default=timezone.now, verbose_name="Дата")
     lesson_number = models.PositiveSmallIntegerField(verbose_name="Номер пары")
     group = models.ForeignKey(Group, on_delete=models.PROTECT, verbose_name="Группа", related_name="lessons")
+    primechaniye = models.CharField(null=True, blank=True)
     room = models.CharField(verbose_name="Кабинет")
     class Meta:
         constraints = [

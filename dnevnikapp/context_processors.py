@@ -9,6 +9,7 @@ def header_context(request):
     today = timezone.localdate()
     if not user.is_authenticated:
         links = [
+            {"title":"Главная", "url":reverse("home")},
             {"title":"Вход", "url":reverse("login")},
         ]
     elif user.role == "admin":
