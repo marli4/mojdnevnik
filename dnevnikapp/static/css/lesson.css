@@ -12,6 +12,11 @@
 .lesson-student{
     display: flex;
     align-items: center;
+    gap:16px;
+    justify-content: space-between;
+}
+.gradeabsence{
+    display: flex;
     gap:4px;
 }
 .lessongrade, .lessonabsence{
@@ -72,4 +77,18 @@ button{
 .lessongrade:hover,
 .lessonabsence:hover {
     transform: scale(1.05);
+}
+
+@media (min-width: 0px) and (max-width:360px) {
+
+
+}
+@media (min-width: 0px) and (max-width:768px) {
+    .lesson-studentsgrid{
+        grid-template-columns: repeat(2,1fr);
+    }
+}
+
+@media (min-width: 1440px){
+
 }

@@ -34,7 +34,7 @@
                     {% elif user.role == "parent" %}
                         <a href="{% url 'children' %}" class="button">Дети</a>
                     {% elif user.role == "teacher" %}
-                        <a href="{% url 'lessons' %}" class="button">Занятия</a>
+                        <a href="{% url 'lessons' date=today %}" class="button">Занятия</a>
                         <a href="{% url 'groups' %}" class="button">Группы</a>
                     {% elif user.role == "admin" %}
                         <a href="{% url 'groups' %}" class="button">Группы</a>

@@ -19,27 +19,30 @@
         <div class="mainblock">
             <form class="mainform">
                 {% csrf_token %}
+                <h3>Домашнее задание</h3>
                 <textarea readonly disabled name="hometask" placeholder="Домашнее задание">{{ lesson.hometask.text }}</textarea>
                 <div class="lesson-studentsgrid">
                     {% for student in students %}
                         <div class="lesson-student">
                             <p>{{ student.last_name }} {{ student.first_name|slice:1 }}. {{ student.patronimic|slice:1 }}.</p>
-                            <button type="button"
-                                class="lessongrade {% if student.grade.grade >= 4 %}grade-good{% elif student.grade.grade == 3 %}grade-ok{% elif student.grade.grade == 2 %}grade-bad{% endif %}"
-                            >
-                                {{ student.grade.grade|default:"" }}
-                            </button>
-                            <button type="button" 
-                                class="lessonabsence {% if student.absence %}{% if student.absence.is_excused %}absence-excused{% else %}absence{% endif %}{% endif %}"
-                            >
-                                {% if student.absence %}
-                                    {% if student.absence.is_excused %}
-                                        УП
-                                    {% else %}
-                                        Н
+                            <div class="gradeabsence">
+                                <button type="button"
+                                    class="lessongrade {% if student.grade.grade >= 4 %}grade-good{% elif student.grade.grade == 3 %}grade-ok{% elif student.grade.grade == 2 %}grade-bad{% endif %}"
+                                >
+                                    {{ student.grade.grade|default:"" }}
+                                </button>
+                                <button type="button" 
+                                    class="lessonabsence {% if student.absence %}{% if student.absence.is_excused %}absence-excused{% else %}absence{% endif %}{% endif %}"
+                                >
+                                    {% if student.absence %}
+                                        {% if student.absence.is_excused %}
+                                            УП
+                                        {% else %}
+                                            Н
+                                        {% endif %}
                                     {% endif %}
-                                {% endif %}
-                            </button>
+                                </button>
+                            </div>
                         </div>
                     {% endfor %}
                 </div>

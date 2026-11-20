@@ -136,7 +136,7 @@ def gradeBookView(request, groupid, subjectid):
         if groupid != request.user.group.id:
             raise PermissionDenied
     elif request.user.role == User.Role.PARENT:
-        children = request.user.children.filter(group_id=groupid)
+        children = request.user.children.filter(group_id=groupid).first()
         if children == None:
             raise PermissionDenied
 

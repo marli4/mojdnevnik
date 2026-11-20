@@ -22,3 +22,11 @@
 .notification > p{
     font-size: 24px;
 }
+
+@media (min-width:0px) and (max-width:768px){
+    .profileline{
+        flex-direction: column;
+        gap:29px;
+        align-items: stretch;
+    }
+}
