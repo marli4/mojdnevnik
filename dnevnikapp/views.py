@@ -126,8 +126,10 @@ def groupSubjectsView(request, groupid):
         if nochildren:
             raise PermissionDenied
 
-
-    subjects = Subject.objects.all()
+    if request.user.role == User.Role.TEACHER:
+        subjects = Subject.objects.filter(lessons__teacher_id=request.user.id, lessons__group_id=groupid).distinct()
+    else:
+        subjects = Subject.objects.all()
     context={
         "subjects":subjects,
         "group":Group.objects.filter(pk=groupid).first(),
