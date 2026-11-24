@@ -126,6 +126,7 @@ def groupSubjectsView(request, groupid):
         if nochildren:
             raise PermissionDenied
 
+
     subjects = Subject.objects.all()
     context={
         "subjects":subjects,
@@ -155,7 +156,9 @@ def gradeBookView(request, groupid, subjectid):
 
     prevMonth = 12 if month == 1 else month - 1
     nextMonth = 1 if month == 12 else month + 1
-        
+
+    lessons = list(Lesson.objects.filter(date__lte=enddate, date__gte=startdate, subject_id=subjectid, group_id=groupid))
+    
     students = list(User.objects.filter(group_id=groupid).order_by("last_name"))
     grades = list(Grade.objects.select_related("student__group", "lesson__subject"
                             ).filter(student__group_id=groupid, lesson__subject_id=subjectid, lesson__date__gte=startdate, lesson__date__lte=enddate)
@@ -186,6 +189,10 @@ def gradeBookView(request, groupid, subjectid):
         student.gradesbyday = grades_matrix[student.pk]
         student.absencesbyday = absences_matrix[student.pk]
 
+    lessonsbyday = defaultdict(list)
+    for lesson in lessons:
+        lessonsbyday[lesson.date] = lesson
+
     context = {
         "group": group,
         "subject": subject,
@@ -194,6 +201,7 @@ def gradeBookView(request, groupid, subjectid):
         "startdate":startdate,
         "prevMonth":prevMonth,
         "nextMonth":nextMonth,
+        "lessonsbyday":lessonsbyday,
     }
     return render(request, "gradebook.html", context=context)
 

@@ -47,7 +47,7 @@
                     {% for notification in notifications %}
                         <div class="notification">
                             <h2>{{ notification.created_at|date:"d.m.Y" }}</h2>
-                            <p>{{ notification.text }}</p>
+                            <p>{{ notification.text|truncatechars:200 }}</p>
                         </div>
                     {% endfor %}
                 </div>

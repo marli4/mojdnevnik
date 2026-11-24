@@ -1,0 +1,191 @@
+[
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 1,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$vGEGQgFSPkix2SS113ltxl$16HvWSvM+RBvq/TH/Tg5Lz2Z4G+OURMUUbUAmdETJtk=",
+    "last_login": "2026-11-23T21:14:34.419Z",
+    "is_superuser": true,
+    "username": "adminka",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-16T11:02:16Z",
+    "first_name": "Админ",
+    "last_name": "Админов",
+    "patronimic": "Админович",
+    "role": "admin",
+    "group": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 2,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$95niJWF4x48gEgWgUUydbF$X1Es25iCjypj1uKVXTzWRGQtRrh9fTLIkDuMrJVkcSY=",
+    "last_login": "2026-11-23T15:03:53.385Z",
+    "is_superuser": false,
+    "username": "markov.i",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-16T11:14:33Z",
+    "first_name": "Илья",
+    "last_name": "Марков",
+    "patronimic": "Максимович",
+    "role": "student",
+    "group": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 3,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$Q69WhIwwtArxmXl7IT5YvN$srKhdrD7HsqlietTUYMgOHCmpQ+DDBDQBfXSwMc/6nk=",
+    "last_login": "2026-11-16T11:54:28.307Z",
+    "is_superuser": true,
+    "username": "synadmina",
+    "email": "",
+    "is_staff": true,
+    "is_active": true,
+    "date_joined": "2026-11-16T11:15:20Z",
+    "first_name": "Сынадмина",
+    "last_name": "Админов",
+    "patronimic": "Админович",
+    "role": "admin",
+    "group": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 4,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$h46lxSS6PMz4SRasVY42KV$Y2C5Yl4NzUeMcP7wp9VTZW3aDmUGg6RzhFJc29Wc8Gs=",
+    "last_login": "2026-11-19T21:51:07.104Z",
+    "is_superuser": false,
+    "username": "petrov.p",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-16T12:08:04Z",
+    "first_name": "Петр",
+    "last_name": "Петров",
+    "patronimic": "Петрович",
+    "role": "student",
+    "group": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 5,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$FRDpdQP818gPz2ya4osxAo$PVV5qsD+9YF/v8LgmR08GKiJ43u+q6bAoXqc9MJl7Ac=",
+    "last_login": "2026-11-23T20:57:06.708Z",
+    "is_superuser": false,
+    "username": "ivanova.m",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-16T12:09:12.156Z",
+    "first_name": "Мария",
+    "last_name": "Иванова",
+    "patronimic": "Ивановна",
+    "role": "teacher",
+    "group": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 6,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$v3NFytY2t3oG2BOkwa4vRH$OXY6RxH3hM7DrFAgeqIqOLslQptVq14R9/Fkes8bJQI=",
+    "last_login": "2026-11-20T03:56:54.614Z",
+    "is_superuser": false,
+    "username": "akhmedulin.a",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-16T12:26:13.846Z",
+    "first_name": "Амир",
+    "last_name": "Ахмедулин",
+    "patronimic": "Камильевич",
+    "role": "student",
+    "group": 2,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 7,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$lTWAf62HDRvsqg8Dz4gnLF$o2WN01mtm375XdF6ls/bQfT9qwl/iWw29OQZDPUXnSk=",
+    "last_login": "2026-11-19T15:26:54.879Z",
+    "is_superuser": false,
+    "username": "einstein.a",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-16T12:35:53.140Z",
+    "first_name": "Альберт",
+    "last_name": "Эйнштейн",
+    "patronimic": null,
+    "role": "teacher",
+    "group": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 8,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$0lkQGPPLMv96U2cy4UyvDb$BmUmAi8w6bpAegXj6KaMS9g91kUqmY03AGrxr0mh29s=",
+    "last_login": "2026-11-23T14:39:13.661Z",
+    "is_superuser": false,
+    "username": "petrov.p.parent",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-18T13:17:47Z",
+    "first_name": "Петр",
+    "last_name": "Петров",
+    "patronimic": "Алексеевич",
+    "role": "parent",
+    "group": null,
+    "groups": [],
+    "user_permissions": []
+  }
+},
+{
+  "model": "dnevnikapp.customuser",
+  "pk": 9,
+  "fields": {
+    "password": "pbkdf2_sha256$1500000$gVtR4V8tJutDqVodGJYz3K$S31evpQkP7a4K8bnb9KugsMQeVqjjGMEP/frvMci4d0=",
+    "last_login": null,
+    "is_superuser": false,
+    "username": "studentov.s",
+    "email": "",
+    "is_staff": false,
+    "is_active": true,
+    "date_joined": "2026-11-19T16:17:41Z",
+    "first_name": "Студент",
+    "last_name": "Студентов",
+    "patronimic": "Алексеевич",
+    "role": "student",
+    "group": 1,
+    "groups": [],
+    "user_permissions": []
+  }
+}
+]
