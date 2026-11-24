@@ -226,7 +226,7 @@ def lessonView(request, lessonid):
     elif request.user.role == "teacher" and request.user.id != lesson.teacher_id:
         raise PermissionDenied
     
-    students = lesson.group.students.all()
+    students = lesson.group.students.prefetch_related("parents", "grades", "absences")
 
     if request.method == "POST" and ((request.user.role == "teacher" and request.user.id == lesson.teacher_id) or request.user.role == "admin"):
         with transaction.atomic():
@@ -272,13 +272,17 @@ def lessonView(request, lessonid):
 
                 if updatedOrCreatedGrade and updatedOrCreatedGrade[1]:
                     Notification.objects.create(user=student, text="Новая оценка: " + str(updatedOrCreatedGrade[0]))
+                    for parent in student.parents.all():
+                        Notification.objects.create(user=parent, text="Новая оценка: " + student.last_name + " " + student.first_name + " " + str(updatedOrCreatedGrade[0]))
                 if updatedOrCreatedAbsence and updatedOrCreatedAbsence[1]:
-                    Notification.objects.create(user=student, text="Новый пропуск: " + str(updatedOrCreatedAbsence[0]))  
+                    Notification.objects.create(user=student, text="Новый пропуск: " + str(updatedOrCreatedAbsence[0]))
+                    for parent in student.parents.all():  
+                        Notification.objects.create(user=parent, text="Новый пропуск: " + student.last_name + " " + student.first_name + " " + str(updatedOrCreatedAbsence[0]))  
         return redirect("lessons", lessonid=lesson.pk)
 
     for student in students:
-        student.grade = student.grades.first()
-        student.absence = student.absences.first()
+        student.grade = student.grades.filter(lesson_id=lessonid).first()
+        student.absence = student.absences.filter(lesson_id=lessonid).first()
     context = {
         "lesson":lesson,
         "students":students,
