@@ -223,10 +223,12 @@ def lessonView(request, lessonid):
         raise PermissionDenied
     elif request.user.role == "parent" and request.user.children.filter(group_id=lesson.group_id).first() == None:
         raise PermissionDenied
+    elif request.user.role == "teacher" and request.user.id != lesson.teacher_id:
+        raise PermissionDenied
     
     students = lesson.group.students.all()
 
-    if request.method == "POST" and (request.user.role == "teacher" or request.user.role == "admin"):
+    if request.method == "POST" and ((request.user.role == "teacher" and request.user.id == lesson.teacher_id) or request.user.role == "admin"):
         with transaction.atomic():
             hometasktext = request.POST.get("hometask", "")
             primechaniyetext = request.POST.get("primechaniye", "")
