@@ -1,0 +1,14 @@
+{% extends 'baseheader.html' %}
+
+{% block title %}Ошибка{% endblock %}
+
+{% block content %}
+<div class="centerdiv centerpadding">
+    <h1>500</h1>
+    <h2>Внутренняя ошибка сервера</h2>
+    <a class="button" href="{% url 'home' %}">Главная</a>
+    <br>
+    <br>
+    <br>
+</div>
+{% endblock %}
