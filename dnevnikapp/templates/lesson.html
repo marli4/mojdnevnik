@@ -21,7 +21,6 @@
                 {% csrf_token %}
                 <h3>Домашнее задание</h3>
                 <textarea name="hometask" placeholder="Домашнее задание">{{ lesson.hometask.text }}</textarea>
-                <textarea name="primechaniye" placeholder="Примечание">{{ lesson.primechaniye }}</textarea>
                 <div class="lesson-studentsgrid">
                     {% for student in students %}
                         <div class="lesson-student">
