@@ -44,6 +44,9 @@
             <div>
                 <h2 class="whitetext">Уведомления</h2>
                 <div class="notifications">
+                    {% if not notifications %}
+                        <h3 class="whitetext">Уведомлений пока нет</h3>
+                    {% endif %}
                     {% for notification in notifications %}
                         <div class="notification">
                             <h2>{{ notification.created_at|date:"d.m.Y" }}</h2>
